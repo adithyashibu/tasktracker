@@ -5,15 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Tracker</title>
     <style>
-        /* ... Your existing styles ... */
-        .priority-high {
-            color: red;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-        .priority-medium {
-            color: orange;
+        #taskList {
+            width: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .priority-low {
-            color: green;
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 5px 0;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #888;
         }
     </style>
 </head>
@@ -25,12 +44,6 @@
             <input type="text" id="taskName" placeholder="Enter task">
             <label for="dueDate">Due Date:</label>
             <input type="date" id="dueDate">
-            <label for="priority">Priority:</label>
-            <select id="priority">
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
-            </select>
             <button onclick="addTask()">Add Task</button>
         </div>
         <div id="tasks"></div>
@@ -42,7 +55,6 @@
         function addTask() {
             const taskNameInput = document.getElementById('taskName');
             const dueDateInput = document.getElementById('dueDate');
-            const prioritySelect = document.getElementById('priority');
 
             if (taskNameInput.value.trim() === '') {
                 alert('Please enter a task name.');
@@ -52,7 +64,6 @@
             const task = {
                 name: taskNameInput.value.trim(),
                 dueDate: dueDateInput.value,
-                priority: prioritySelect.value,
                 completed: false
             };
 
@@ -66,7 +77,6 @@
         function displayTask(task) {
             const taskElement = document.createElement('div');
             taskElement.classList.add('task');
-            taskElement.classList.add(`priority-${task.priority}`);
             taskElement.innerHTML = `
                 <span class="${task.completed ? 'completed' : ''}">${task.name} - Due: ${task.dueDate}</span>
                 <button onclick="toggleCompletion(${taskList.children.length})">Toggle</button>
@@ -88,24 +98,8 @@
 
             if (timeDifference > 0) {
                 setTimeout(() => {
-                    showNotification(`Reminder: ${task.name} (Priority: ${task.priority.toUpperCase()}) is due today!`);
+                    alert(`Reminder: ${task.name} is due today!`);
                 }, timeDifference);
-            }
-        }
-
-        function showNotification(message) {
-            // Check if the browser supports notifications
-            if ('Notification' in window) {
-                // Request permission from the user
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        // Create and show the notification
-                        new Notification('Task Tracker', {
-                            body: message,
-                            icon: 'path/to/your/icon.png' // Replace with the path to your notification icon
-                        });
-                    }
-                });
             }
         }
     </script>
